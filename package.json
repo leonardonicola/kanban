@@ -8,6 +8,15 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.4.1",
     "nuxt": "^3.2.2"
+  },
+  "overrides": {
+    "vue": "latest"
+  },
+  "dependencies": {
+    "@heroicons/vue": "^2.0.16",
+    "@pinia/nuxt": "^0.4.7",
+    "pinia": "^2.0.32"
   }
 }
