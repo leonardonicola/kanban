@@ -4,4 +4,5 @@ export default defineNuxtConfig({
     shim: false,
   },
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
+  ssr: false
 });
