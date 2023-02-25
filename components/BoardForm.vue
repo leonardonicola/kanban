@@ -18,6 +18,7 @@
           <div class="flex flex-col gap-5">
             <label for="task_name">Board Name</label>
             <input
+              autofocus
               v-model.trim="boardName"
               type="text"
               name="task_name"
@@ -58,13 +59,8 @@ const resetValues = (): void => {
   boardName.value = "";
 };
 
-const isInputsValid = (): boolean => {
-  if (boardName.value.match(/^$/)) return false;
-  else return true;
-};
-
 const useCreateNewBoard = () => {
-  if (isInputsValid()) {
+  if (useValidator(boardName.value)) {
     createNewBoard(boardName.value);
     resetValues();
     emits("closeForm");

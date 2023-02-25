@@ -1,21 +1,20 @@
 <template>
   <transition name="fade">
     <div
+      v-if="isFormOpenState"
       class="center-fixed w-full h-full bg-black bg-opacity-50 flex items-center justify-center"
-      v-if="props.isFormOpen"
     >
       <div
         class="w-full h-5/6 md:w-1/3 md:h-4/5 flex flex-col p-8 bg-neutral-800 rounded-xl gap-10 relative m-10"
       >
         <button
           class="absolute right-0 translate-x-4 -translate-y-5 top-0 rounded-full bg-neutral-900 p-3"
-          @click="emits('closeForm')"
+          @click="toggleFormModal(false)"
         >
           <XMarkIcon class="w-5 h-5" />
         </button>
 
-        <h2 v-if="!!props.taskToEdit">Edit task</h2>
-        <h2 v-else>Add new task</h2>
+        <h2>{{ !!taskToEditState ? "Edit" : "Add" }} Task</h2>
 
         <div class="w-full h-full overflow-y-auto space-y-10 pr-8">
           <div class="flex flex-col space-y-2">
@@ -51,18 +50,10 @@
         </div>
 
         <button
-          v-if="!!props.taskToEdit"
-          @click="editTaskInfos"
+          @click="!!taskToEditState ? editTaskInfos() : createNewTask()"
           class="bg-savoy p-2 rounded-lg font-semibold"
         >
-          Edit Task
-        </button>
-        <button
-          v-else
-          @click="createNewTask"
-          class="bg-savoy p-2 rounded-lg font-semibold"
-        >
-          Create Task
+          {{ !!taskToEditState ? "Edit" : "Add New" }} Task
         </button>
       </div>
     </div>
@@ -72,12 +63,13 @@
 import { useKanbanStore } from "~~/stores/kanban";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 
-//Emits and Props
-const emits = defineEmits(["closeForm"]);
-const props = defineProps<{
-  isFormOpen: boolean;
-  taskToEdit: TaskToEdit | null;
-}>();
+const isFormOpenState = isTaskFormOpen();
+const taskToEditState = taskToEdit();
+
+const toggleFormModal = (isOpen: boolean): void => {
+  isFormOpenState.value = isOpen;
+  taskToEditState.value = null;
+};
 
 //Route
 const route = useRoute();
@@ -98,28 +90,28 @@ const createNewTask = (): void => {
     name: taskName.value,
     description: taskDescription.value,
   };
-  if (isInputsValid()) {
+  if (useValidator(taskDescription.value, taskName.value)) {
     addTaskToColumn(boardId, taskColumn.value, newTask);
     resetValues();
-    emits("closeForm");
+    toggleFormModal(false);
   }
 };
 
 const editTaskInfos = (): void => {
   const editedTask = {
-    id: props.taskToEdit!.id,
+    id: taskToEditState.value!.id,
     name: taskName.value,
     description: taskDescription.value,
   };
-  if (isInputsValid()) {
+  if (useValidator(taskDescription.value, taskName.value)) {
     editTask(
       boardId,
-      props.taskToEdit!.columnParentId,
+      taskToEditState.value!.columnParentId,
       taskColumn.value,
       editedTask
     );
     resetValues();
-    emits("closeForm");
+    toggleFormModal(false);
   }
 };
 
@@ -129,19 +121,11 @@ const resetValues = (): void => {
   taskDescription.value = "";
 };
 
-const isInputsValid = (): boolean => {
-  if (taskName.value.match(/^$/) || taskDescription.value.match(/^$/))
-    return false;
-  else return true;
-};
-
-//Hooks
-onBeforeUpdate(() => {
-  //If it received a task to edit, then populate the refs with it values
-  if (props.taskToEdit) {
-    taskName.value = props.taskToEdit.name;
-    taskDescription.value = props.taskToEdit.description;
-    taskColumn.value = props.taskToEdit.columnParentId;
+watch(taskToEditState, () => {
+  if (taskToEditState.value !== null) {
+    taskName.value = taskToEditState.value.name;
+    taskDescription.value = taskToEditState.value.description;
+    taskColumn.value = taskToEditState.value.columnParentId;
   } else {
     resetValues();
   }

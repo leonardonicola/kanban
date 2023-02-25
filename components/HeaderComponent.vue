@@ -7,7 +7,7 @@
     </select>
     <h2 class="hidden md:block">{{ boardName }}</h2>
     <button
-      @click="emits('openModal')"
+      @click="toggleFormModal(true)"
       class="bg-savoy rounded-3xl px-5 py-3 font-semibold"
     >
       + ADD TASK
@@ -17,10 +17,11 @@
 <script setup lang="ts">
 import { useKanbanStore } from "~~/stores/kanban";
 
-const emits = defineEmits(["openModal"]);
-
+//Route
 const route = useRoute();
 const router = useRouter()
+
+//Store
 const store = useKanbanStore();
 const { boards } = store;
 
@@ -29,8 +30,18 @@ const boardName = computed(() => {
   return boards.find((board) => board.id === boardId)?.name;
 });
 
+//Refs
+const isFormOpenState = isTaskFormOpen()
+const taskToEditState = taskToEdit()
 const boardInView = ref<number>(boardId)
 
+//Methods
+const toggleFormModal = (isOpen: boolean): void => {
+  taskToEditState.value = null;
+  isFormOpenState.value = isOpen;
+};
+
+//Watcher for when user changes the board he wants to view in mobile
 watch(boardInView, () => {
   router.push(boardInView.value.toString())
 })
