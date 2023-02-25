@@ -31,33 +31,6 @@ export const useKanbanStore = defineStore("kanban", {
           },
         ],
       },
-      {
-        id: 2,
-        name: "Roadmap",
-        columns: [
-          {
-            id: 1,
-            name: "Todo",
-            tasks: [
-              {
-                id: "52a96ewe-1213-46f6-8ae3-6a8fb00b126e",
-                name: "Título incrível do board 2",
-                description: "Top 10 descrições do anime",
-              },
-            ],
-          },
-          {
-            id: 2,
-            name: "In Progress",
-            tasks: [],
-          },
-          {
-            id: 3,
-            name: "Done",
-            tasks: [],
-          },
-        ],
-      },
     ],
   }),
   getters: {
@@ -136,5 +109,19 @@ export const useKanbanStore = defineStore("kanban", {
           modifiedTasks;
       }
     },
+    createNewColumn(boardId: number, columnName: string) {
+      this.boards
+        .find((board) => board.id === boardId)!
+        .columns.push({
+          id: this.getBoardColumns(boardId).length + 1,
+          name: columnName,
+          tasks: [],
+        });
+    },
+    editColumnName(boardId: number, columnId: number, columnName: string){
+      this.boards
+        .find((board) => board.id === boardId)!
+        .columns.find((column) => column.id === columnId)!.name = columnName
+    }
   },
 });
