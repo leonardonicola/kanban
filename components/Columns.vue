@@ -104,7 +104,6 @@ const toggleColumnForm = (columnId: number | null, columnOgName: string) => {
 const changeColumnName = (columnId: number) => {
   if (useValidator(columnEditedName.value)) {
     editColumnName(boardId, columnId, columnEditedName.value);
-    console.log(columnEditedName.value);
     toggleColumnForm(null, "");
   }
 };

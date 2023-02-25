@@ -1,20 +1,20 @@
 <template>
   <transition name="fade">
     <div
-      v-if="props.isFormOpen"
+      v-if="boardFormState"
       class="center-fixed w-full h-full bg-black bg-opacity-50 flex items-center justify-center"
     >
       <div
-        class="w-full h-5/6 md:w-1/3 md:h-1/2 flex flex-col p-8 bg-neutral-800 rounded-xl gap-10 relative m-10"
+        class="w-fit h-fit flex flex-col p-8 bg-neutral-800 rounded-xl gap-10 relative m-10"
       >
         <button
           class="absolute right-0 translate-x-4 -translate-y-5 top-0 rounded-full bg-neutral-900 p-3"
-          @click="emits('closeForm')"
+          @click="() => boardFormState = false"
         >
           <XMarkIcon class="w-5 h-5" />
         </button>
         <h2>Create a New Board</h2>
-        <div class="flex flex-col space-y-2 justify-between h-full">
+        <div class="flex flex-col space-y-2 justify-between h-full md:w-96">
           <div class="flex flex-col gap-5">
             <label for="task_name">Board Name</label>
             <input
@@ -41,8 +41,7 @@ import { useKanbanStore } from "~~/stores/kanban";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 //Props and emits
-const props = defineProps<{ isFormOpen: boolean }>();
-const emits = defineEmits(["closeForm"]);
+const boardFormState = isBoardFormOpen()
 
 //Route
 const router = useRouter();
@@ -63,7 +62,7 @@ const useCreateNewBoard = () => {
   if (useValidator(boardName.value)) {
     createNewBoard(boardName.value);
     resetValues();
-    emits("closeForm");
+    boardFormState.value = false
   }
   router.push(`/${boards.length}`);
 };

@@ -3,7 +3,9 @@
     class="flex items-center justify-between px-5 h-28 w-full bg-neutral-800 border-b border-neutral-600"
   >
     <select class="block md:hidden" v-model="boardInView">
-      <option v-for="board in boards" :value="board.id">{{ board.name }}</option>
+      <option v-for="board in boards" :value="board.id">
+        {{ board.name }}
+      </option>
     </select>
     <h2 class="hidden md:block">{{ boardName }}</h2>
     <button
@@ -19,7 +21,7 @@ import { useKanbanStore } from "~~/stores/kanban";
 
 //Route
 const route = useRoute();
-const router = useRouter()
+const router = useRouter();
 
 //Store
 const store = useKanbanStore();
@@ -31,9 +33,9 @@ const boardName = computed(() => {
 });
 
 //Refs
-const isFormOpenState = isTaskFormOpen()
-const taskToEditState = taskToEdit()
-const boardInView = ref<number>(boardId)
+const isFormOpenState = isTaskFormOpen();
+const taskToEditState = taskToEdit();
+const boardInView = ref<number>(boardId);
 
 //Methods
 const toggleFormModal = (isOpen: boolean): void => {
@@ -43,6 +45,6 @@ const toggleFormModal = (isOpen: boolean): void => {
 
 //Watcher for when user changes the board he wants to view in mobile
 watch(boardInView, () => {
-  router.push(boardInView.value.toString())
-})
+  router.push(boardInView.value.toString());
+});
 </script>

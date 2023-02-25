@@ -21,11 +21,11 @@
         <ViewColumnsIcon class="w-8 h-8" />
         {{ board.name }}
       </NuxtLink>
-      <div class="px-8 py-3 mr-5 flex gap-2 items-center text-savoy cursor-pointer" @click="isBoardFormOpen = true">
+      <div class="px-8 py-3 mr-5 flex gap-2 items-center text-savoy cursor-pointer" @click="boardFormState = true">
         <ViewColumnsIcon class="w-8 h-8" />+ Create New Board
       </div>
     </aside>
-    <BoardForm :is-form-open="isBoardFormOpen" @close-form="() => isBoardFormOpen = false"/>
+    <BoardForm />
     <slot></slot>
   </main>
 </template>
@@ -33,10 +33,10 @@
 import { useKanbanStore } from "~~/stores/kanban";
 import { ViewColumnsIcon } from "@heroicons/vue/24/outline";
 
+const boardFormState = isBoardFormOpen()
+
 const store = useKanbanStore();
 const { boards } = store;
-
-const isBoardFormOpen = ref<boolean>(false);
 
 const boardsCount = computed(() => {
   return boards.length;
