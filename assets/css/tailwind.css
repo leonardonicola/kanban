@@ -26,11 +26,20 @@ body {
   select {
     @apply bg-transparent border border-neutral-500 placeholder-neutral-500;
     @apply py-2 px-4 rounded;
-    @apply focus:outline-none;
+    @apply focus:outline-none focus:cursor-auto;
+    @apply transition-colors;
+    @apply hover:border-indigo-500;
+    @apply cursor-pointer;
   }
 
   option {
     @apply bg-neutral-700
+  }
+}
+
+@layer components {
+  .popup-modal {
+    @apply center-fixed w-full h-full bg-black bg-opacity-50 flex items-center justify-center
   }
 }
 

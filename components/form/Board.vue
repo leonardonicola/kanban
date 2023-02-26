@@ -2,13 +2,13 @@
   <transition name="fade">
     <div
       v-if="boardFormState"
-      class="center-fixed w-full h-full bg-black bg-opacity-50 flex items-center justify-center"
+      class="popup-modal"
     >
       <div
-        class="w-fit h-fit flex flex-col p-8 bg-neutral-800 rounded-xl gap-10 relative m-10"
+        class="w-fit h-fit flex flex-col p-8 bg-charcoal rounded-xl gap-10 relative m-10"
       >
         <button
-          class="absolute right-0 translate-x-4 -translate-y-5 top-0 rounded-full bg-neutral-900 p-3"
+          class="absolute right-0 translate-x-4 -translate-y-5 top-0 rounded-full bg-mauve p-3"
           @click="() => boardFormState = false"
         >
           <XMarkIcon class="w-5 h-5" />
@@ -26,12 +26,10 @@
             />
           </div>
         </div>
-        <button
-          @click="useCreateNewBoard"
-          class="bg-savoy p-2 rounded-lg font-semibold"
-        >
-          CREATE BOARD
-        </button>
+        <ButtonBase
+          label="Create Board"
+          @action="useCreateNewBoard"
+        />
       </div>
     </div>
   </transition>

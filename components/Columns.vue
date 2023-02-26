@@ -46,42 +46,8 @@
       />
     </TransitionGroup>
   </div>
-
-  <div
-    class="w-80 h-full flex flex-col items-center justify-center rounded-xl cursor-pointer bg-gradient-to-b from-charcoal"
-    @click.self="() => (isCreatingColumn = true)"
-  >
-    <h2
-      class="text-2xl font-bold text-marengo hover:text-indigo-600 transition-colors"
-      @click.self="() => (isCreatingColumn = true)"
-    >
-      + New Column
-    </h2>
-    <transition name="fade">
-      <div
-        v-if="isCreatingColumn"
-        class="mt-10 flex flex-col justify-center text-base font-semibold"
-      >
-        <input
-          type="text"
-          v-model="newColumnName"
-          @keyup.enter="createColumn"
-          autofocus
-        />
-        <div class="flex justify-between gap-5 mt-4">
-          <button class="rounded-xl bg-savoy px-4" @click="createColumn">
-            Add Column
-          </button>
-          <button @click="() => (isCreatingColumn = false)">
-            <XMarkIcon class="w-10 h-10" />
-          </button>
-        </div>
-      </div>
-    </transition>
-  </div>
 </template>
 <script setup lang="ts">
-import { XMarkIcon } from "@heroicons/vue/24/outline";
 import { useKanbanStore } from "~~/stores/kanban";
 //Route
 const route = useRoute();
@@ -89,13 +55,7 @@ const boardId = Number(route.params.board);
 
 //Store
 const store = useKanbanStore();
-const {
-  getBoardColumns,
-  getColumnTasks,
-  editTask,
-  createNewColumn,
-  editColumnName,
-} = store;
+const { getBoardColumns, getColumnTasks, editTask, editColumnName } = store;
 
 //Refs
 const isFormOpenState = isTaskFormOpen();
@@ -104,10 +64,6 @@ const taskToEditState = taskToEdit();
 //Edit column
 const columnIdUnderEdit = ref<number | null>(null);
 const columnEditedName = ref<string>("");
-
-//Create column
-const isCreatingColumn = ref<boolean>(false);
-const newColumnName = ref<string>("");
 
 //Methods
 const toggleColumnForm = (columnId: number | null, columnOgName: string) => {
@@ -126,14 +82,6 @@ const openEditForm = (task: Task, columnId: number): void => {
   isFormOpenState.value = true;
   taskToEditState.value = { ...task, columnParentId: columnId };
   columnIdUnderEdit.value = null;
-};
-
-const createColumn = (): void => {
-  if (useValidator(newColumnName.value)) {
-    createNewColumn(boardId, newColumnName.value);
-    newColumnName.value = "";
-    isCreatingColumn.value = false;
-  }
 };
 
 const startDrag = (

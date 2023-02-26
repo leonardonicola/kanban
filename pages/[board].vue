@@ -1,9 +1,13 @@
 <template>
   <section class="w-full overflow-hidden">
-    <TaskForms/>
+    <FormTasks />
+    <FormBoard />
     <HeaderComponent />
-    <div class="grid grid-flow-col gap-10 p-5 h-5/6 overflow-x-auto min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)]">
-     <Columns/>
+    <div
+      class="grid grid-flow-col gap-10 p-5 overflow-x-auto h-[calc(100vh-100px)]"
+    >
+      <Columns />
+      <FormColumn />
     </div>
   </section>
 </template>

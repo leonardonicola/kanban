@@ -1,11 +1,8 @@
 <template>
   <transition name="fade">
-    <div
-      v-if="isFormOpenState"
-      class="center-fixed w-full h-full bg-black bg-opacity-50 flex items-center justify-center"
-    >
+    <div v-if="isFormOpenState" class="popup-modal">
       <div
-        class="w-full h-5/6 md:w-1/3 md:h-4/5 flex flex-col p-8 bg-charcoal rounded-xl gap-10 relative m-10"
+        class="w-96 lg:w-1/3 h-4/5 flex flex-col p-8 bg-charcoal rounded-xl gap-10 relative m-10"
       >
         <button
           class="absolute right-0 translate-x-4 -translate-y-5 top-0 rounded-full bg-mauve p-3"
@@ -16,7 +13,7 @@
 
         <h2>{{ !!taskToEditState ? "Edit" : "Add" }} Task</h2>
 
-        <div class="w-full h-full overflow-y-auto space-y-10 pr-8">
+        <div class="w-full h-full space-y-10 pr-8 flex flex-col">
           <div class="flex flex-col space-y-2">
             <label for="task_name">Title</label>
             <input
@@ -27,7 +24,7 @@
             />
           </div>
 
-          <div class="flex flex-col space-y-2 h-2/3 md:h-1/2 overflow-hidden">
+          <div class="flex flex-col space-y-2 h-full overflow-hidden">
             <label for="task_description">Description</label>
             <textarea
               v-model.trim="taskDescription"
@@ -41,23 +38,21 @@
           <div class="space-y-2">
             <p>Current status</p>
             <select name="status" v-model="taskColumn">
-            <option
-              v-for="column in getBoardColumns(boardId)"
-              :key="column.id"
-              :value="column.id"
-            >
-              {{ column.name }}
-            </option>
-          </select>
+              <option
+                v-for="column in getBoardColumns(boardId)"
+                :key="column.id"
+                :value="column.id"
+              >
+                {{ column.name }}
+              </option>
+            </select>
           </div>
         </div>
 
-        <button
-          @click="!!taskToEditState ? editTaskInfos() : createNewTask()"
-          class="bg-savoy p-2 rounded-lg font-semibold"
-        >
-          {{ !!taskToEditState ? "Edit" : "Add New" }} Task
-        </button>
+        <ButtonBase
+          :label="buttonLabel"
+          @action="taskToEditState ? editTaskInfos() : createNewTask()"
+        />
       </div>
     </div>
   </transition>
@@ -123,6 +118,10 @@ const resetValues = (): void => {
   taskName.value = "";
   taskDescription.value = "";
 };
+
+const buttonLabel = computed(() => {
+  return taskToEditState.value ? "Edit Task" : "Add New Task";
+});
 
 watch(taskToEditState, () => {
   if (taskToEditState.value !== null) {
