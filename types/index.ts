@@ -17,10 +17,6 @@ interface Board extends Base {
   columns: Column[];
 }
 
-interface State {
-  boards: Board[];
-}
-
 interface TaskToEdit extends Task{
   columnParentId: number
 }

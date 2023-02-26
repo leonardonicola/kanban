@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
+import {useStorage} from '@vueuse/core'
 
 export const useKanbanStore = defineStore("kanban", {
-  state: (): State => ({
-    boards: [
+  state: () => ({
+    boards: useStorage('board',[
       {
         id: 1,
         name: "Studies",
@@ -31,7 +32,7 @@ export const useKanbanStore = defineStore("kanban", {
           },
         ],
       },
-    ],
+    ]),
   }),
   getters: {
     getBoardColumns:
