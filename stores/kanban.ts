@@ -7,7 +7,7 @@ export const useKanbanStore = defineStore("kanban", {
     boards: useStorage('board',[
       {
         id: 1,
-        name: "Studies",
+        name: "Any Board",
         columns: [
           {
             id: 1,
@@ -15,8 +15,8 @@ export const useKanbanStore = defineStore("kanban", {
             tasks: [
               {
                 id: "52a96e6f-1213-46f6-8ae3-6a8fb00b126e",
-                name: "Título incrível",
-                description: "Top 10 descrições do anime",
+                name: "Title example",
+                description: "Description example",
               },
             ],
           },
