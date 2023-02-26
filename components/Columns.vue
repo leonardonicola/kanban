@@ -8,8 +8,8 @@
     @dragover.prevent
   >
     <div
-      :class="columnIdUnderEdit === column.id ? '' : 'hover:bg-neutral-800'"
-      class="flex justify-between gap-2 items-center w-full py-4 mb-5 pl-2 bg-mauve transition-colors ease-out cursor-pointer"
+      :class="columnIdUnderEdit === column.id ? '' : 'hover:bg-charcoal'"
+      class="flex justify-between gap-2 items-center w-full py-4 mb-5 pl-2 bg-mauve rounded-xl transition-colors ease-out cursor-pointer"
       @click.self="toggleColumnForm(column.id, column.name)"
     >
       <form
@@ -26,12 +26,16 @@
         />
         <input type="submit" name="submit" value="✓" />
       </form>
-      <p v-else @click.self="toggleColumnForm(column.id, column.name)">
-        {{ column.name }} ({{ countTasks(column.id) }})
+      <p
+        v-else
+        @click.self="toggleColumnForm(column.id, column.name)"
+        class="text-marengo"
+      >
+        {{ column.name.toUpperCase() }} ({{ countTasks(column.id) }})
       </p>
     </div>
 
-    <div class="flex flex-col gap-5">
+    <TransitionGroup tag="div" name="tasks" class="flex flex-col gap-5">
       <TaskCard
         v-for="task in getColumnTasks(boardId, column.id)"
         :key="task.id"
@@ -40,30 +44,40 @@
         @click="openEditForm(task, column.id)"
         @dragstart="startDrag($event, task, column.id)"
       />
-    </div>
+    </TransitionGroup>
   </div>
 
   <div
-    class="w-80 h-full rounded-xl bg-neutral-800 cursor-pointer flex flex-col items-center justify-center"
+    class="w-80 h-full flex flex-col items-center justify-center rounded-xl cursor-pointer bg-gradient-to-b from-charcoal"
     @click.self="() => (isCreatingColumn = true)"
   >
-    + New Column
-    <div v-if="isCreatingColumn" class="mt-10 flex flex-col justify-center">
-      <input
-        type="text"
-        v-model="newColumnName"
-        @keyup.enter="createColumn"
-        autofocus
-      />
-      <div class="flex justify-between gap-5 mt-4">
-        <button class="rounded-xl bg-savoy px-4" @click="createColumn">
-          Add Column
-        </button>
-        <button @click="() => (isCreatingColumn = false)">
-          <XMarkIcon class="w-10 h-10" />
-        </button>
+    <h2
+      class="text-2xl font-bold text-marengo hover:text-indigo-600 transition-colors"
+      @click.self="() => (isCreatingColumn = true)"
+    >
+      + New Column
+    </h2>
+    <transition name="fade">
+      <div
+        v-if="isCreatingColumn"
+        class="mt-10 flex flex-col justify-center text-base font-semibold"
+      >
+        <input
+          type="text"
+          v-model="newColumnName"
+          @keyup.enter="createColumn"
+          autofocus
+        />
+        <div class="flex justify-between gap-5 mt-4">
+          <button class="rounded-xl bg-savoy px-4" @click="createColumn">
+            Add Column
+          </button>
+          <button @click="() => (isCreatingColumn = false)">
+            <XMarkIcon class="w-10 h-10" />
+          </button>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 <script setup lang="ts">

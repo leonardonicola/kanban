@@ -5,10 +5,10 @@
       class="center-fixed w-full h-full bg-black bg-opacity-50 flex items-center justify-center"
     >
       <div
-        class="w-full h-5/6 md:w-1/3 md:h-4/5 flex flex-col p-8 bg-neutral-800 rounded-xl gap-10 relative m-10"
+        class="w-full h-5/6 md:w-1/3 md:h-4/5 flex flex-col p-8 bg-charcoal rounded-xl gap-10 relative m-10"
       >
         <button
-          class="absolute right-0 translate-x-4 -translate-y-5 top-0 rounded-full bg-neutral-900 p-3"
+          class="absolute right-0 translate-x-4 -translate-y-5 top-0 rounded-full bg-mauve p-3"
           @click="toggleFormModal(false)"
         >
           <XMarkIcon class="w-5 h-5" />
@@ -38,7 +38,9 @@
             />
           </div>
 
-          <select name="status" v-model="taskColumn">
+          <div class="space-y-2">
+            <p>Current status</p>
+            <select name="status" v-model="taskColumn">
             <option
               v-for="column in getBoardColumns(boardId)"
               :key="column.id"
@@ -47,6 +49,7 @@
               {{ column.name }}
             </option>
           </select>
+          </div>
         </div>
 
         <button

@@ -1,6 +1,6 @@
 <template>
   <header
-    class="flex items-center justify-between px-5 h-28 w-full bg-neutral-800 border-b border-neutral-600"
+    class="flex items-center justify-between px-5 h-24 w-full bg-charcoal"
   >
     <select class="block md:hidden" v-model="boardInView">
       <option v-for="board in boards" :value="board.id">
@@ -10,7 +10,7 @@
     <h2 class="hidden md:block">{{ boardName }}</h2>
     <button
       @click="toggleFormModal(true)"
-      class="hidden md:block bg-savoy rounded-3xl px-5 py-3 font-semibold"
+      class="hidden md:block bg-savoy rounded-3xl px-5 py-3 font-semibold hover:scale-105 transition"
     >
       + ADD TASK
     </button>
