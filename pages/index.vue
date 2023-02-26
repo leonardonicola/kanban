@@ -20,6 +20,3 @@ import { useKanbanStore } from "~~/stores/kanban";
 const store = useKanbanStore();
 const { boards } = store;
 </script>
-<style>
-@import url("../assets/css/transitions.css");
-</style>
