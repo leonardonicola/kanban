@@ -15,22 +15,21 @@
       + ADD TASK
     </button>
     <Bars2Icon class="md:hidden w-10 h-10" @click="() => (isMenuOpen = true)" />
-    <Teleport to="main">
-      <transition name="fade">
-        <div
-          v-if="isMenuOpen"
-          class="center-fixed w-full h-full bg-neutral-800 flex flex-col gap-10 items-center justify-center font-bold"
-          >
-          <NuxtLink to="/" class="border-b p-2">HOME</NuxtLink>
-          <p class="border-b p-2" @click="openBoardModal">+ CREATE NEW BOARD</p>
-          <p class="border-b p-2" @click="toggleFormModal(true); ">+ ADD TASK</p>
-          <XMarkIcon
-            class="w-10 h-10 absolute top-8 right-5 z-10"
-            @click="() => (isMenuOpen = false)"
-          />
-        </div>
-      </transition>
-    </Teleport>
+
+    <transition name="fade">
+      <div
+        v-if="isMenuOpen"
+        class="center-fixed w-full h-full bg-neutral-800 flex flex-col gap-10 items-center justify-center font-bold z-20"
+      >
+        <NuxtLink to="/" class="border-b p-2">HOME</NuxtLink>
+        <p class="border-b p-2" @click="openBoardModal">+ CREATE NEW BOARD</p>
+        <p class="border-b p-2" @click="toggleFormModal(true)">+ ADD TASK</p>
+        <XMarkIcon
+          class="w-10 h-10 absolute top-8 right-5 z-10"
+          @click="() => (isMenuOpen = false)"
+        />
+      </div>
+    </transition>
   </header>
 </template>
 <script setup lang="ts">
@@ -51,7 +50,7 @@ const boardName = computed(() => {
 });
 
 //Refs
-const boardFormState = isBoardFormOpen()
+const boardFormState = isBoardFormOpen();
 const isFormOpenState = isTaskFormOpen();
 const taskToEditState = taskToEdit();
 const boardInView = ref<number>(boardId);
@@ -61,13 +60,13 @@ const isMenuOpen = ref<boolean>(false);
 const toggleFormModal = (isOpen: boolean): void => {
   taskToEditState.value = null;
   isFormOpenState.value = isOpen;
-  isMenuOpen.value = false
+  isMenuOpen.value = false;
 };
 
 const openBoardModal = (): void => {
-  boardFormState.value = true
-  isMenuOpen.value = false
-}
+  boardFormState.value = true;
+  isMenuOpen.value = false;
+};
 
 //Watcher for when user changes the board he wants to view in mobile
 watch(boardInView, () => {
