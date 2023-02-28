@@ -1,3 +1,4 @@
+![image](https://user-images.githubusercontent.com/85263860/221988721-0898b3b8-a446-49c5-aec9-82e0cb0a8343.png)
 # Kanban
 
 Um gerenciador de tasks no estilo Kanban baseado no desafio nível Guru do [Frontend Mentor](https://www.frontendmentor.io/challenges/kanban-task-management-web-app-wgQLt-HlbB).
