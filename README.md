@@ -1,6 +1,6 @@
 # Kanban
 
-Um gerenciador de tasks no estilo Kanban
+Um gerenciador de tasks no estilo Kanban baseado no desafio nível Guru do [Frontend Mentor](https://www.frontendmentor.io/challenges/kanban-task-management-web-app-wgQLt-HlbB).
 
 ## Etiquetas
 
