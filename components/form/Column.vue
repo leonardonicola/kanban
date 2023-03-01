@@ -18,7 +18,7 @@
           autofocus
         />
         <div class="flex justify-between gap-5 mt-4">
-          <ButtonBase label="Create Column" @action="createColumn"/>
+          <ButtonBase label="Create Column" @action="createColumn" class="bg-savoy"/>
           <button @click="() => (isCreatingColumn = false)">
             <XMarkIcon class="w-10 h-10" />
           </button>
@@ -35,7 +35,7 @@ const { createNewColumn } = useKanbanStore();
 
 //Route
 const route = useRoute();
-const boardId = Number(route.params.board);
+const boardId = route.params.board.toString()
 
 //Refs
 const isCreatingColumn = ref<boolean>(false);

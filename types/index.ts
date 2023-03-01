@@ -1,11 +1,9 @@
 interface Base {
-  id: number;
+  id: string;
   name: string;
 }
 
-interface Task {
-  id: string;
-  name: string;
+interface Task extends Base{
   description: string;
 }
 
@@ -18,5 +16,5 @@ interface Board extends Base {
 }
 
 interface TaskToEdit extends Task{
-  columnParentId: number
+  columnParentId: string
 }

@@ -1,16 +1,16 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
-import {useStorage} from '@vueuse/core'
+import { useStorage } from "@vueuse/core";
 
 export const useKanbanStore = defineStore("kanban", {
   state: () => ({
-    boards: useStorage('board',[
+    boards: useStorage("board", [
       {
-        id: 1,
+        id: "499ff073-7759-45c4-a62b-020860056830",
         name: "Any Board",
         columns: [
           {
-            id: 1,
+            id: "52a3c12c-a755-46e1-9a95-22ab10d61a1d",
             name: "Todo",
             tasks: [
               {
@@ -21,75 +21,74 @@ export const useKanbanStore = defineStore("kanban", {
             ],
           },
           {
-            id: 2,
+            id: "c46c6c66-9da0-42f2-97fd-1c212e4e8de2",
             name: "In Progress",
             tasks: [],
           },
           {
-            id: 3,
+            id: "3e6f2fa2-1c93-4409-85b7-4660c36a1242",
             name: "Done",
             tasks: [],
           },
         ],
       },
-    ]),
+    ] as Board[] | undefined),
   }),
   getters: {
     getBoardColumns:
       (state) =>
-      (boardId: number): Column[] => {
-        const findBoard = state.boards.find((board) => board.id === boardId);
-        return findBoard!.columns;
+      (boardId: string): Column[] | undefined => {
+        const findBoard = state.boards?.find((board) => board.id === boardId);
+        return findBoard?.columns;
       },
     getColumnTasks() {
-      return (boardId: number, columnId: number): Task[] => {
-        const column = this.getBoardColumns(boardId).find(
+      return (boardId: string, columnId: string): Task[] | undefined => {
+        const column = this.getBoardColumns(boardId)?.find(
           (column) => column.id === columnId
         );
-        return column!.tasks;
+        return column?.tasks;
       };
     },
   },
   actions: {
     addTaskToColumn(
-      boardId: number,
-      columnId: number,
+      boardId: string,
+      columnId: string,
       taskInfos: Omit<Task, "id">
     ) {
       const newTask = { id: uuidv4(), ...taskInfos };
       this.boards
-        .find((board) => board.id === boardId)!
+        ?.find((board) => board.id === boardId)!
         .columns.find((column) => column.id === columnId)!
         .tasks.push(newTask);
     },
-    removeTaskFromColumn(boardId: number, columnId: number, editedTask: Task) {
+    removeTaskFromColumn(boardId: string, columnId: string, editedTask: Task) {
       const boardTasks = this.getColumnTasks(boardId, columnId);
-      const filteredTasks = boardTasks.filter(
+      const filteredTasks = boardTasks!.filter(
         (task) => task.id !== editedTask.id
       );
       //Removing task from original column
-      this.boards
-        .find((board) => board.id === boardId)!
-        .columns.find((column) => column.id === columnId)!.tasks =
-        filteredTasks;
+      this.boards!.find((board) => board.id === boardId)!.columns.find(
+        (column) => column.id === columnId
+      )!.tasks = filteredTasks;
     },
     createNewBoard(boardName: string) {
       const boardTemplate: Board = {
-        id: this.boards.length + 1,
+        id: uuidv4(),
         name: boardName,
         columns: [
-          { id: 1, name: "Todo", tasks: [] },
-          { id: 2, name: "In Progress", tasks: [] },
-          { id: 3, name: "Done", tasks: [] },
+          { id: uuidv4(), name: "Todo", tasks: [] },
+          { id: uuidv4(), name: "In Progress", tasks: [] },
+          { id: uuidv4(), name: "Done", tasks: [] },
         ],
       };
       //Modifing state
-      this.boards.push(boardTemplate);
+      this.boards?.push(boardTemplate);
     },
     editTask(
-      boardId: number,
-      columnId: number,
-      newColumnId: number,
+      boardId: string,
+      columnId: string,
+      newColumnId: string,
       editedTask: Task
     ) {
       const boardTasks = this.getColumnTasks(boardId, columnId);
@@ -99,30 +98,38 @@ export const useKanbanStore = defineStore("kanban", {
         this.removeTaskFromColumn(boardId, columnId, editedTask);
         this.addTaskToColumn(boardId, newColumnId, editedTask);
       } else {
-        const modifiedTasks = boardTasks.map((task) =>
+        const modifiedTasks = boardTasks!.map((task) =>
           task.id === editedTask.id ? editedTask : task
         );
 
         //Modifing state
-        this.boards
-          .find((board) => board.id === boardId)!
-          .columns.find((column) => column.id === columnId)!.tasks =
-          modifiedTasks;
+        this.boards!.find((board) => board.id === boardId)!.columns.find(
+          (column) => column.id === columnId
+        )!.tasks = modifiedTasks;
       }
     },
-    createNewColumn(boardId: number, columnName: string) {
-      this.boards
-        .find((board) => board.id === boardId)!
-        .columns.push({
-          id: this.getBoardColumns(boardId).length + 1,
-          name: columnName,
-          tasks: [],
-        });
+    createNewColumn(boardId: string, columnName: string) {
+      this.boards!.find((board) => board.id === boardId)!.columns.push({
+        id: uuidv4(),
+        name: columnName,
+        tasks: [],
+      });
     },
-    editColumnName(boardId: number, columnId: number, columnName: string){
-      this.boards
-        .find((board) => board.id === boardId)!
-        .columns.find((column) => column.id === columnId)!.name = columnName
-    }
+    editColumnName(boardId: string, columnId: string, columnName: string) {
+      this.boards!.find((board) => board.id === boardId)!.columns.find(
+        (column) => column.id === columnId
+      )!.name = columnName;
+    },
+    editBoard(boardId: string, newBoardName: string, newColumnsName: Column[]) {
+      const findBoard = this.boards!.find((board) => board.id === boardId)!;
+      findBoard.name = newBoardName;
+      findBoard.columns = newColumnsName;
+    },
+    deleteBoard(boardId: string) {
+      this.boards!.splice(
+        this.boards!.findIndex((board) => board.id === boardId),
+        1
+      );
+    },
   },
 });

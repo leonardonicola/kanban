@@ -1,15 +1,12 @@
 <template>
   <transition name="fade">
-    <div
-      v-if="boardFormState"
-      class="popup-modal"
-    >
+    <div v-if="boardFormState" class="popup-modal">
       <div
         class="w-fit h-fit flex flex-col p-8 bg-charcoal rounded-xl gap-10 relative m-10"
       >
         <button
           class="absolute right-0 translate-x-4 -translate-y-5 top-0 rounded-full bg-mauve p-3"
-          @click="() => boardFormState = false"
+          @click="() => (boardFormState = false)"
         >
           <XMarkIcon class="w-5 h-5" />
         </button>
@@ -26,10 +23,7 @@
             />
           </div>
         </div>
-        <ButtonBase
-          label="Create Board"
-          @action="useCreateNewBoard"
-        />
+        <ButtonBase label="Create Board" @action="useCreateNewBoard" class="bg-savoy"/>
       </div>
     </div>
   </transition>
@@ -39,17 +33,14 @@ import { useKanbanStore } from "~~/stores/kanban";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 //Props and emits
-const boardFormState = isBoardFormOpen()
-
-//Route
-const router = useRouter();
+const boardFormState = isAddBoardFormOpen();
 
 //Refs
 const boardName = ref<string>("");
 
 //Store
 const store = useKanbanStore();
-const { createNewBoard, boards } = store;
+const { createNewBoard } = store;
 
 //Methods
 const resetValues = (): void => {
@@ -60,8 +51,7 @@ const useCreateNewBoard = () => {
   if (useValidator(boardName.value)) {
     createNewBoard(boardName.value);
     resetValues();
-    boardFormState.value = false
+    boardFormState.value = false;
   }
-  router.push(`/${boards.length}`);
 };
 </script>

@@ -1,13 +1,15 @@
 <template>
   <section class="w-full overflow-hidden">
     <FormTasks />
-    <FormBoard />
     <HeaderComponent />
-    <div
-      class="grid grid-flow-col gap-10 p-5 overflow-x-auto h-[calc(100vh-100px)]"
-    >
-      <Columns />
-      <FormColumn />
-    </div>
+    <FormEditBoard />
+    <Columns v-if="boards!.length > 0" />
   </section>
 </template>
+<script setup lang="ts">
+import { storeToRefs } from "pinia";
+import { useKanbanStore } from "~~/stores/kanban";
+const store = useKanbanStore();
+
+const { boards } = storeToRefs(store);
+</script>

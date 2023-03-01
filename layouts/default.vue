@@ -9,16 +9,18 @@
         >
         <p class="mb-5 tracking-widest">ALL BOARDS ({{ boardsCount }})</p>
       </div>
-      <NuxtLink
-        v-for="board in boards"
-        :key="board.id"
-        :to="`/${board.id}`"
-        class="flex gap-2 px-5 py-3 mr-5 items-center hover:bg-red-400 transition-colors rounded-r-3xl font-bold"
-        exact-active-class="bg-savoy"
-      >
-        <ViewColumnsIcon class="w-5 h-5" />
-        {{ board.name }}
-      </NuxtLink>
+      <div v-if="boards!.length > 0">
+        <NuxtLink
+          v-for="board in boards"
+          :key="board.id"
+          :to="`/${board.id}`"
+          class="flex gap-2 px-5 py-3 mr-5 items-center hover:bg-red-400 transition-colors rounded-r-3xl font-bold"
+          exact-active-class="bg-savoy"
+        >
+          <ViewColumnsIcon class="w-5 h-5" />
+          {{ board.name }}
+        </NuxtLink>
+      </div>
       <div
         class="px-5 py-3 mr-5 flex gap-2 items-center text-savoy cursor-pointer hover:bg-gray-500/20 transition-colors rounded-r-3xl"
         @click="boardFormState = true"
@@ -27,18 +29,21 @@
       </div>
     </aside>
     <slot></slot>
+    <FormAddBoard />
   </main>
 </template>
 <script setup lang="ts">
 import { useKanbanStore } from "~~/stores/kanban";
 import { ViewColumnsIcon } from "@heroicons/vue/24/outline";
+import { storeToRefs } from "pinia";
 
-const boardFormState = isBoardFormOpen();
+const boardFormState = isAddBoardFormOpen();
 
 const store = useKanbanStore();
-const { boards } = store;
+
+const { boards } = storeToRefs(store);
 
 const boardsCount = computed(() => {
-  return boards.length;
+  return boards.value?.length;
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
   <button
     @click="() => emits('action')"
-    class="bg-savoy p-2 rounded-lg font-semibold"
+    class="p-2 rounded-lg font-semibold"
   >
     {{ props.label }}
   </button>
