@@ -14,10 +14,10 @@ Um gerenciador de tasks no estilo Kanban baseado no desafio nível Guru do [Fron
 
 - [x] Drag and Drop
   - [x] Arrastar e soltar tarefas entre colunas (status)
-- [x] Ações
+- [x] CRUD
   - [x] Criar e editar tarefas
-  - [x] Criar e editar colunas (status)
-  - [x] Criar boards
+  - [x] Criar, editar e remover colunas (status)
+  - [x] Criar, editar e remover boards
 - [x] Responsividade mobile
 - [x] localStorage
 
