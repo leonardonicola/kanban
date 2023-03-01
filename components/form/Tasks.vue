@@ -37,7 +37,7 @@
 
           <div class="space-y-2">
             <p>Current status</p>
-            <select name="status" v-model="taskColumn">
+            <select name="status" v-model="taskColumnId">
               <option
                 v-for="column in getBoardColumns(boardId)"
                 :key="column.id"
@@ -52,6 +52,7 @@
         <ButtonBase
           :label="buttonLabel"
           @action="taskToEditState ? editTaskInfos() : createNewTask()"
+          class="bg-savoy"
         />
       </div>
     </div>
@@ -71,14 +72,14 @@ const toggleFormModal = (isOpen: boolean): void => {
 
 //Route
 const route = useRoute();
-const boardId = Number(route.params.board);
+const boardId = route.params.board.toString()
 
 //Store
 const store = useKanbanStore();
 const { addTaskToColumn, getBoardColumns, editTask } = store;
 
 //Refs
-const taskColumn = ref<number>(1);
+const taskColumnId = ref<string>('');
 const taskName = ref<string>("");
 const taskDescription = ref<string>("");
 
@@ -89,7 +90,7 @@ const createNewTask = (): void => {
     description: taskDescription.value,
   };
   if (useValidator(taskDescription.value, taskName.value)) {
-    addTaskToColumn(boardId, taskColumn.value, newTask);
+    addTaskToColumn(boardId, taskColumnId.value, newTask);
     resetValues();
     toggleFormModal(false);
   }
@@ -105,7 +106,7 @@ const editTaskInfos = (): void => {
     editTask(
       boardId,
       taskToEditState.value!.columnParentId,
-      taskColumn.value,
+      taskColumnId.value,
       editedTask
     );
     resetValues();
@@ -114,20 +115,20 @@ const editTaskInfos = (): void => {
 };
 
 const resetValues = (): void => {
-  taskColumn.value = 1;
+  taskColumnId.value = getBoardColumns(boardId)![0].id;
   taskName.value = "";
   taskDescription.value = "";
 };
 
 const buttonLabel = computed(() => {
-  return taskToEditState.value ? "Edit Task" : "Add New Task";
+  return taskToEditState.value ? "Save Changes" : "Add Task";
 });
 
-watch(taskToEditState, () => {
+watch(isFormOpenState, () => {
   if (taskToEditState.value !== null) {
     taskName.value = taskToEditState.value.name;
     taskDescription.value = taskToEditState.value.description;
-    taskColumn.value = taskToEditState.value.columnParentId;
+    taskColumnId.value = taskToEditState.value.columnParentId;
   } else {
     resetValues();
   }
